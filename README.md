@@ -51,6 +51,120 @@ To achieve this goal, the project implements a server-side web application respo
 The purpose of this report is to describe the work carried out within the context of the Software Dependability course project. In particular, the report highlights how the techniques, methodologies, and tools presented during the course were applied and integrated into the development lifecycle of the application. The document also discusses the strategies adopted to improve the reliability, correctness, and maintainability of the system, demonstrating how dependability-oriented practices can be incorporated into the development of modern software systems.
 
 ## Containerization with Docker
+The system is designed as a containerized backend application composed
+of multiple services that cooperate to provide versioning
+functionalities for 3D assets. The infrastructure is orchestrated using
+Docker and Docker Compose, allowing the application and all its
+dependencies to run in a reproducible and isolated environment.
+
+The core component of the system is a Java server application built
+using the Spring Framework. The application exposes RESTful APIs
+responsible for managing repositories, resources, versions, and
+collaborative features such as repository invitations. The application
+is built using Maven and packaged into a Docker image through a
+multi-stage build process.
+
+An excerpt of the Dockerfile used to build the application is shown
+below:
+```dockerfile
+FROM maven:3.9.6-eclipse-temurin-21 AS build
+WORKDIR /app
+
+COPY pom.xml .
+RUN mvn dependency:go-offline -B
+
+COPY src ./src
+RUN mvn clean package
+```
+
+The final runtime image uses a lightweight Java Runtime Environment:
+```dockerfile
+FROM eclipse-temurin:21-jre
+WORKDIR /app
+COPY --from=build /app/target/*-exec.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]
+```
+
+The application relies on three main external services: MongoDB,
+JanusGraph, and MinIO. These services are orchestrated through Docker
+Compose, which defines the containers, networking configuration, and
+persistent storage volumes.
+
+MongoDB is used as a document-oriented database to store version
+metadata and authentication-related information. The following excerpt
+from the Docker Compose configuration shows how the MongoDB container is
+defined:
+```dockerfile
+mongodb:
+  image: mongo:6
+  container_name: mongodb
+  ports:
+    - "27017:27017"
+  environment:
+    MONGO_INITDB_ROOT_USERNAME: ${MONGODB_ROOT_USERNAME}
+    MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_ROOT_PASSWORD}
+    MONGO_INITDB_DATABASE: ${MONGODB_NAME}
+  volumes:
+    - mongo-data:/data/db
+```
+
+JanusGraph is used as a graph database to model relationships between
+entities such as users, repositories, and resources. This allows the
+system to efficiently represent collaboration structures and repository
+interactions.
+```dockerfile
+janusgraph:
+  image: janusgraph/janusgraph:1.0
+  container_name: janusgraph
+  command:
+    - bin/janusgraph-server.sh
+    - /opt/janusgraph/conf/janusgraph-server.yaml
+  ports:
+    - "8182:8182"
+  volumes:
+    - janus-data:/var/lib/janusgraph
+```
+
+For storing large binary files such as FBX models and PNG textures
+associated with materials, the system uses MinIO, an S3-compatible
+object storage service:
+```dockerfile
+minio:
+  image: minio/minio
+  container_name: minio
+  command: server /data --console-address ":9001"
+  ports:
+    - "9000:9000"
+    - "9001:9001"
+  volumes:
+    - minio-data:/data
+```
+
+The application container connects to these services using environment
+variables defined in the Docker Compose configuration. This approach
+allows the same container image to be deployed in different environments
+by simply changing the configuration parameters.
+```dockerfile
+environment:
+  MINIO_HOST: minio
+  MONGO_HOST: mongodb
+  JANUS_HOST: janusgraph
+  JWT_SECRET: ${JWT_SECRET}
+```
+
+Persistent volumes are defined for all storage services to ensure that
+data remains available even if containers are restarted or recreated.
+This architecture separates metadata management from binary asset
+storage: structured data and relationships are stored in MongoDB and
+JanusGraph, while large files are handled by MinIO.
+
+In addition to the local development configuration, the project also
+includes a separate Docker Compose configuration used for automated
+environments such as CI pipelines. In this configuration, the
+application container is pulled directly from Docker Hub rather than
+built locally, allowing automated systems to deploy and test the
+application in a consistent environment.
 
 ## Instruments and Techniques
 
