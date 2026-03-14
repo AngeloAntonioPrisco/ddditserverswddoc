@@ -373,6 +373,10 @@ Before the expansion of the test suite, the JaCoCo report reflected a critical l
 - **Critical Gaps:** Strategic components such as `VersionServiceImpl`, `GremlinAuthRepository`, and nearly all Validator classes were completely untested, highlighted in red.
 - **Single Points of Success:** The `BlobStorage` implementation had 87% coverage, but this was isolated and did not reflect the overall system health.
 
+<div align="center">
+
+[![prejacoco.png](https://i.postimg.cc/d1prQnw2/prejacoco.png)](https://postimg.cc/CBCzmGZ5)</div>
+
 This situation posed a high risk of undetected defects and regression errors, making the project vulnerable to failures in production.
 
 *Strategic JaCoCo Configuration* -
