@@ -6,7 +6,7 @@
 
 **Angelo Antonio Prisco** (0522501996) - [AngeloAntonioPrisco](https://github.com/AngeloAntonioPrisco)
 
-**Pasquale Sorrentino** (0522501996) - [PasqualeSorrentino](https://github.com/PasqualeSorrentino)
+**Pasquale Sorrentino** (0522501954) - [PasqualeSorrentino](https://github.com/PasqualeSorrentino)
 
 ## Professor 
 **Prof. Dario Di Nucci** - [Dario Di Nucci](https://docenti.unisa.it/029186/home)
