@@ -4,9 +4,9 @@
 
 ## Authors
 
-**Angelo Antonio Prisco** (0522501996) - [AngeloAntonioPrisco](https://github.com/AngeloAntonioPrisco)
+**Angelo Antonio Prisco** (0522501996) Software Engineering - [AngeloAntonioPrisco](https://github.com/AngeloAntonioPrisco)
 
-**Pasquale Sorrentino** (0522501954) - [PasqualeSorrentino](https://github.com/PasqualeSorrentino)
+**Pasquale Sorrentino** (0522501954) Software Engineering - [PasqualeSorrentino](https://github.com/PasqualeSorrentino)
 
 ## Professor 
 **Prof. Dario Di Nucci** - [Dario Di Nucci](https://docenti.unisa.it/029186/home)
