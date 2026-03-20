@@ -626,3 +626,6 @@ By integrating SonarQube and Snyk, we successfully mitigated critical security v
 The testing strategy evolved significantly: unit testing was expanded through Category Partitioning, achieving over 80% coverage verified by JaCoCo, while pitest confirmed high test strength of 80%, ensuring that the suite is capable of detecting real-world bugs.
 Furthermore, the adoption of JML and formal verification scripts institutionalized the Design by Contract paradigm, providing mathematical grounding for code correctness despite the complexities of Spring and Lombok.
 This holistic approach—combining automated security, formal specifications, and mutation testing—has established a robust foundation for long-term scalability and software quality.
+
+## 🔗 Related resources
+- [Dddit Server](https://github.com/AngeloAntonioPrisco/ddditserver): The official Dddit Server repository.
